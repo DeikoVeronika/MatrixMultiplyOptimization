@@ -1,6 +1,6 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
-#include <cstdlib>
+#include <random>
 
 using namespace std;
 
@@ -12,9 +12,12 @@ vector<vector<int>> multiplyMatricesBlocked(const vector<vector<int>>& A, const 
     for (int ii = 0; ii < n; ii += blockSize) {
         for (int jj = 0; jj < n; jj += blockSize) {
             for (int kk = 0; kk < n; kk += blockSize) {
-                for (int i = ii; i < min(ii + blockSize, n); i++) {
-                    for (int j = jj; j < min(jj + blockSize, n); j++) {
-                        for (int k = kk; k < min(kk + blockSize, n); k++) {
+                int iMax = min(ii + blockSize, n);
+                int jMax = min(jj + blockSize, n);
+                int kMax = min(kk + blockSize, n);
+                for (int i = ii; i < iMax; i++) {
+                    for (int j = jj; j < jMax; j++) {
+                        for (int k = kk; k < kMax; k++) {
                             C[i][j] += A[i][k] * B[k][j];
                         }
                     }
@@ -28,12 +31,12 @@ vector<vector<int>> multiplyMatricesBlocked(const vector<vector<int>>& A, const 
 
 vector<vector<int>> generateRandomMatrix(int n, int seed) {
     vector<vector<int>> matrix(n, vector<int>(n));
-
-    srand(seed);
+    mt19937 gen(seed);
+    uniform_int_distribution<> dis(0, 9999);
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            matrix[i][j] = rand() % 10000;
+            matrix[i][j] = dis(gen);
         }
     }
 
